@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build-frontend:
     docker:
-      -image: circleci/node:13.8.0
+      - image: circleci/node:13.8.0
     steps: 
       - checkout
       - restore_cache:
@@ -22,6 +22,8 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout 
+      - restore_cache:
+          keys: [backend-build]
       - run:
           name: Build Back-End
           command: |
