@@ -112,4 +112,4 @@ workflows:
           requires: [build-frontend]
       - scan-backend:
           context: CircleBot
-          requires: [build-backend].
+          requires: [build-backend]
