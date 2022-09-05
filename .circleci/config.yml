@@ -1,5 +1,15 @@
 version: 2.1
-
+commands:
+  notify_error:
+    steps:
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+  notify_pass:
+    steps:
+      - slack/notify:
+          event: pass
+          template: basic_success_1
 orbs:
   slack: circleci/slack@4.1
 
@@ -7,82 +17,65 @@ jobs:
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
-    steps: 
+    steps:
+      - trigger_slack_notification
       - checkout
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: basic_success_1
       - run:
           name: Build Front-End
           command: |
             cd frontend
             npm install
             npm run build
+      - notify_error
+      - notify_pass
   build-backend: 
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - trigger_slack_notification
       - checkout
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: basic_success_1
       - run:
           name: Build Back-End
           command: |
             cd backend
             npm install
             npm run build
+      - notify_error
+      - notify_pass
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - trigger_slack_notification
       - checkout
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: basic_success_1
       - run:
           name: Test Front-End
           command: |
             cd frontend
             npm install
             npm run test
+      - notify_fail
+      - notify_pass
   test-backend:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - trigger_slack_notification
       - checkout
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: basic_success_1
       - run:
           name: Test Back-End
           command: |
             cd backend
             npm install
             npm run test
+      - notify_fail
+      - notify_pass
   scan-frontend:
     docker: 
       - image: circleci/node:13.8.0
     steps:
+      - trigger_slack_notification
       - checkout
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: basic_success_1
       - run:
           name: Scan Front-End
           command: |
@@ -90,17 +83,14 @@ jobs:
             npm install
             npm audit fix --audit-level=critical  --force
             npm audit --audit-level=critical
+      - notify_fail
+      - notify_pass
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - trigger_slack_notification
       - checkout
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: basic_success_1
       - run:
           name: Scan Back-End
           command: |
@@ -108,6 +98,8 @@ jobs:
             npm install
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
+      - notify_fail
+      - notify_pass
 workflows:
   default:
     jobs:
