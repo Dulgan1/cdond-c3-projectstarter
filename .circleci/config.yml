@@ -51,7 +51,7 @@ jobs:
             cd frontend
             npm install
             npm run test
-      - notify_fail
+      - notify_error
       - notify_pass
   test-backend:
     docker:
@@ -64,7 +64,7 @@ jobs:
             cd backend
             npm install
             npm run test
-      - notify_fail
+      - notify_error
       - notify_pass
   scan-frontend:
     docker: 
@@ -78,7 +78,7 @@ jobs:
             npm install
             npm audit fix --audit-level=critical  --force
             npm audit --audit-level=critical
-      - notify_fail
+      - notify_error
       - notify_pass
   scan-backend:
     docker:
@@ -92,7 +92,7 @@ jobs:
             npm install
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
-      - notify_fail
+      - notify_error
       - notify_pass
 workflows:
   default:
