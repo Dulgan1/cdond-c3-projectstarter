@@ -206,10 +206,10 @@ jobs:
           name: Get Backend Url
           command: |
             export BACKEND_IP=$(aws ec2 decribe-instances...............)
-          export API_URL="http://${BACKEND_URL}:3030"
-          echo "API_URL = ${API_URL}"
-          echo API_URL="http://${BACKEND_URL}" >> frontend/.env
-          cat frontend/.env
+            export API_URL="http://${BACKEND_URL}:3030"
+            echo "API_URL = ${API_URL}"
+            echo API_URL="http://${BACKEND_URL}" >> frontend/.env
+            cat frontend/.env
       - run:
           command: |
             npm run build
