@@ -23,6 +23,20 @@ commands:
           when: on_fail
           command: |
             aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+  revert-migration:
+    description: Revert Last Migration
+    steps:
+      - run:
+          name: Reverting Last Migration
+          when: on_fail
+          command: |
+            SUCCESS=1
+            if (( $SUCCESS=1 ));
+            then
+               cd ~/project/backend
+               npm install
+               npm run migrations:revert
+            fi
 orbs:
   slack: circleci/slack@4.1
 
@@ -142,6 +156,9 @@ jobs:
       - checkout
       - add_ssh_keys: 
           fingerprints: ["0c:9b:a0:5e:35:f3:57:69:1f:12:bf:3a:21:5a:19:5d"]
+      - persist_to_workspace:
+          root: workspace
+          paths: ~/
       - run: 
           name: Install Dependencies
           command: |
@@ -151,6 +168,61 @@ jobs:
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
+  run-migrations:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: Run Migrations
+          command: |
+            cd backend
+            npm install
+            npm run migrations > migrations_dump.txt
+      - run:
+          name: Send Migration status to kvdb.io
+          command: |
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+            then
+                curl https://kvdb.io/2mcLRs5u4GEpSogUWhb9Je/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
+            fi
+  deploy-frontend:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          command: |
+            apt -y install python3
+      - run:
+          command: |
+            apk add --update ansible
+      - run:
+          command: |
+            yum -y install tar gzip 
+      - run:
+          name: Get Backend Url
+          command: |
+            export BACKEND_IP=$(aws ec2 decribe-instances...............)
+          export API_URL="http://${BACKEND_URL}:3030"
+          echo "API_URL = ${API_URL}"
+          echo API_URL="http://${BACKEND_URL}" >> frontend/.env
+          cat frontend/.env
+      - run:
+          command: |
+            npm run build
+      - run:
+          name: Deploy frontend objects
+            command: |
+              cd frontend
+              npm install
+              npm run build
+              tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+              aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      - destroy-environment
+      - revert-migration
 workflows:
   default:
     jobs:
@@ -177,6 +249,12 @@ workflows:
             - test-frontend
             - scan-backend
             - scan-frontend
+          filters:
+            branch:
+              only: [master]
       - configure-infrastructure:
           context: CircleBot
           requires: [deploy-infrastructure]
+      - run-migrations:
+          context: CircleBot
+          requires: [configure-infrastructure]
