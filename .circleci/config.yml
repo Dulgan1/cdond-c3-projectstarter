@@ -22,7 +22,7 @@ commands:
           name: Destroy Frontend Environment
           when: on_fail
           command: |
-            aws delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+            aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
 orbs:
   slack: circleci/slack@4.1
 
@@ -127,7 +127,7 @@ jobs:
           name: Ensure Backend Infrastructure Exists
           command: |
             aws cloudformation deploy \
-            --template-file .circleci/files/frontend \
+            --template-file .circleci/files/frontend.yml \
             --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
       - persist_to_workspace:
