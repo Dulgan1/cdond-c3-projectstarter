@@ -10,6 +10,19 @@ commands:
       - slack/notify:
           event: pass
           template: basic_success_1
+  destroy-environment:
+    description: Destroy  infrastructure on fail
+    steps:
+      - run:
+          name: Destroy Backen Environment
+          when: on_fail
+          command: |
+            aws delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+      - run:
+          name: Destroy Frontend Environment
+          when: on_fail
+          command: |
+            aws delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
 orbs:
   slack: circleci/slack@4.1
 
@@ -94,6 +107,32 @@ jobs:
             npm audit --audit-level=critical
       - notify_error
       - notify_pass
+  deploy-infrastructure:
+    docker: 
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Ensure Backend Infrastructure Exists
+          command: |
+            aws cloudformation deploy \
+            --template-file .circleci/files/backend.yml \
+            --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides  ID= "${CIRCLE_WORKFLOW_ID:0:7}" \
+            --tags project=udapeople
+      - run:
+          name: Ensure Backend Infrastructure Exists
+          command: |
+            aws cloudformation deploy \
+            --template-file .circleci/files/frontend \
+            --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides ID= "${CIRCLE_WORKFLOW_ID:0:7}" \
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
+      - destroy-environment
+        when: on_fail
 workflows:
   default:
     jobs:
@@ -113,3 +152,11 @@ workflows:
       - scan-backend:
           context: CircleBot
           requires: [build-backend]
+      - deploy-infrastructure:
+          context: CircleBot
+          requires: 
+            - test-backend
+            - test-frontend
+            - scan-backend
+            - scan-frontend
+
