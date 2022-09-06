@@ -179,4 +179,6 @@ workflows:
             - test-frontend
             - scan-backend
             - scan-frontend
-
+      - configure-server:
+          context: CircleBot
+          requires: [deploy-infrastructure]
