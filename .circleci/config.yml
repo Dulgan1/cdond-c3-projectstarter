@@ -252,7 +252,7 @@ workflows:
             - scan-backend
             - scan-frontend
           filters:
-            branch:
+            branches:
               only: [master]
       - configure-infrastructure:
           context: CircleBot
