@@ -158,7 +158,7 @@ jobs:
           fingerprints: ["0c:9b:a0:5e:35:f3:57:69:1f:12:bf:3a:21:5a:19:5d"]
       - persist_to_workspace:
           root: /tmp/workspace
-          paths: ~/.circleci
+          paths: /.circleci
       - run: 
           name: Install Dependencies
           command: |
