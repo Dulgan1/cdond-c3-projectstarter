@@ -15,10 +15,12 @@ commands:
     steps:
       - run:
           name: Destroy Backen Environment
+          when: on_fail
           command: |
             aws delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
           name: Destroy Frontend Environment
+          when: on_fail
           command: |
             aws delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
 orbs:
@@ -130,7 +132,6 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
-          when: on_fail
 workflows:
   default:
     jobs:
