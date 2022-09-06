@@ -215,7 +215,9 @@ jobs:
             npm run build
       - run:
           name: Deploy frontend objects
-            command: |
+          command: |
+
+
               cd frontend
               npm install
               npm run build
