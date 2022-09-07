@@ -189,7 +189,7 @@ jobs:
             fi
   deploy-frontend:
     docker:
-      - image: cimg/base:2021.4
+      - image: circleci/buildpack-deps:stretch
         auth:
           username: dulgan
           password: $DOCKERHUB_PASSWORD
