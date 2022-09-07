@@ -189,7 +189,7 @@ jobs:
             fi
   deploy-frontend:
     docker:
-      - image: cimg/base:2012.4
+      - image: cimg/base:2021.4
         auth:
           username: dulgan
           password: $DOCKERHUB_PASSWORD
