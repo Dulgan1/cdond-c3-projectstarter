@@ -228,6 +228,7 @@ jobs:
             cat frontend/.env
       - run:
           command: |
+            cd ..
             npm install
             npm run build
       - run:
