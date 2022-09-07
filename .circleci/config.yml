@@ -17,7 +17,7 @@ commands:
           name: Destroy Backen Environment
           when: on_fail
           command: |
-            aws delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+            aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
           name: Destroy Frontend Environment
           when: on_fail
@@ -233,8 +233,6 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["0c:9b:a0:5e:35:f3:57:69:1f:12:bf:3a:21:5a:19:5d"]
-      - attach_workspace:
-          at: ~/
       - run:
           command: |
             yum -y install tar gzip
@@ -250,6 +248,7 @@ jobs:
       - run:
           command: | 
             apt -y install nodejs
+      - attach_workspace:                                                 at: ~/
       - run:
           name: Deploy Backend
           command: |
