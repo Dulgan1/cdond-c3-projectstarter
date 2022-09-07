@@ -299,3 +299,9 @@ workflows:
       - run-migrations:
           context: CircleBot
           requires: [configure-infrastructure]
+      - deploy-frontend:
+          context: CircleBot
+          requires: [run-migrations]
+      - deploy-backend:
+          context: CircleBot
+          requires: [deploy-frontend]
