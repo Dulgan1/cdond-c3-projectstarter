@@ -196,23 +196,26 @@ jobs:
     steps:
       - checkout
       - run:
+          command: |
+            sudo apt-get update
+      - run:
           name: Install AWS CLI
           command:
-            apt-get install awscli
+            sudo apt-get install awscli
       - run:
           name: Install Python
           command: |
-            apt-get install python3
+            sudo apt-get install python3
       - run:
           command: |
-            apt-get install ansible
+           sudo apt-get install ansible
       - run:
           command: |
-            yum -y install tar gzip
+           sudo yum -y install tar gzip
       - run:
           name: Install NodeJs
           command: |
-            apt-get install nodejs
+            sudo apt-get install nodejs
       - attach_workspace:
           at: ~/
       - run:
