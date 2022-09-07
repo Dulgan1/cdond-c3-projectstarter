@@ -192,8 +192,6 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/
       - run:
           command: |
             apt -y install python3
@@ -203,6 +201,8 @@ jobs:
       - run:
           command: |
             yum -y install tar gzip 
+      - attach_workspace:
+          at: ~/
       - run:
           name: Get Backend Url
           command: |
