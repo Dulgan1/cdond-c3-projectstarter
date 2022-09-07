@@ -211,7 +211,7 @@ jobs:
            sudo apt-get install ansible
       - run:
           command: |
-           sudo yum -y install tar gzip
+           sudo apt-get -y install tar gzip
       - run:
           name: Install NodeJs
           command: |
@@ -250,19 +250,25 @@ jobs:
           fingerprints: ["0c:9b:a0:5e:35:f3:57:69:1f:12:bf:3a:21:5a:19:5d"]
       - run:
           command: |
-            yum -y install tar gzip
+            sudo apt-get update
       - run:
           command: |
-            apt -y install python3
+            sudo apt-get  -y install tar gzip
       - run:
           command: |
-            apk add  --update ansible
+            sudo apt -y install python3
+      - run:
+          command: |
+            sudo apt-get --update ansible
       - run:
           command: |
             npm install
       - run:
           command: | 
-            apt -y install nodejs
+            sudo  apt-get -y install nodejs
+      - run:
+          command: |
+            sudo apt-get install awscli
       - attach_workspace:
           at: ~/
       - run:
