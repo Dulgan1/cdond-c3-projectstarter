@@ -147,7 +147,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/.circleci/ansible/inventory.txt
+            - .circleci/ansible/inventory.txt
       - destroy-environment
   configure-infrastructure:
     docker:
@@ -159,7 +159,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths: 
-            - project/.circleci/ansible/
+            - .circleci/ansible/
       - run: 
           name: Install Dependencies
           command: |
@@ -178,10 +178,8 @@ jobs:
           name: Run Migrations
           command: |
             cd backend
-            npm cache clean --force
-            rm -rf node_modules
             npm install
-            npm run migrations > migrations_dump.txt
+            npm i  migrations > migrations_dump.txt
       - run:
           name: Send Migration status to kvdb.io
           command: |
