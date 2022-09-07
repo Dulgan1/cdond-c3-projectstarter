@@ -208,10 +208,10 @@ jobs:
             sudo apt-get install python3
       - run:
           command: |
-           sudo apt-get install ansible
+            sudo apt-get install ansible
       - run:
           command: |
-           sudo apt-get -y install tar gzip
+            sudo apt-get -y install tar gzip
       - run:
           name: Install NodeJs
           command: |
@@ -228,8 +228,6 @@ jobs:
             cat frontend/.env
       - run:
           command: |
-            cd ..
-            npm install
             npm run build
       - run:
           name: Deploy frontend objects
