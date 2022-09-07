@@ -159,7 +159,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths: 
-            - project/.circleci/ansible
+            - project/.circleci/ansible/
       - run: 
           name: Install Dependencies
           command: |
@@ -224,6 +224,44 @@ jobs:
               npm run build
               tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
               aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      - destroy-environment
+      - revert-migration
+  deploy-backend:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["0c:9b:a0:5e:35:f3:57:69:1f:12:bf:3a:21:5a:19:5d"]
+      - attah_to_workspace:
+          at: ~/
+      - run:
+          command: |
+            yum -y install tar gzip
+      - run:
+          command: |
+            apt -y install python3
+      - run:
+          command: |
+            apk add  --update ansible
+      - run:
+          command: |
+            npm install
+      - run:
+          command: | 
+            apt -y install nodejs
+      - run:
+          name: Deploy Backend
+          command: |
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            tar -C backend -czvf artifact.tar.gz
+            cd .circleci/ansible
+            echo "Content of the inventory.txt file is ---"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
       - revert-migration
 workflows:

@@ -1,0 +1,54 @@
+---
+- name: "Upgrade Packages."
+  become: true
+  apt:
+    upgrade: "yes"
+- name: "Install dependencies"
+  become: true
+  apt:
+    name: ["nodejs", "npm"]
+    state: latest
+    update_cache: yes
+- name: "Install pm2"
+  become: true
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+    state: present
+- name: "update yum packages"
+  become: true
+  yum:
+    update-cache: true
+- name: "upgrade packages"
+  become: true
+  yum:
+    name: "*"
+    state: latest
+- name: "Create ~/web"
+  become: true
+  ansible.builtin.file:
+    path: ~/web
+    state: directory
+    mode: '0755'
+- name: "Copy Files"
+  become: true
+  copy:
+    src: ~/artifact.tar.gz
+    dest: ~/web
+    backup: true
+- name: "Unzip Artifact.tar.gz"
+  become: true
+  ansible.buitin.unarchive:
+    src: ~/web/artifact.tar.gz
+    dest: ~/web
+    backup: true
+- name: "Npm Install"
+  become: true
+  shell: npm install
+- name: "Stop Default"
+  become: true
+  shell: pm2 stop default
+- name: "Start serve7r"
+  become: true
+  shell: pm2 start npm -- start
