@@ -260,8 +260,15 @@ jobs:
           command: |
             apk add --update nodejs
       - run:
+          name: Installing AWS CLI
           command: |
-            apk add --update awscli
+            apk add --no-cache \
+            python3 \
+            py3-pip \
+            && pip3 install --upgrade pip \
+            && pip3 install \
+            awscli \
+            && rm -rf /var/cache/apk/*
       - attach_workspace:
           at: ~/
       - run:
