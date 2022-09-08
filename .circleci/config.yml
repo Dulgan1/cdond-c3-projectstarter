@@ -221,8 +221,7 @@ jobs:
       - run:
           name: Get Backend Url
           command: |
-            export BACKEND_IP=$(aws ec2 decribe-instance --filters 
-"Name=tag-value,Values=backend-*" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text)
+            export BACKEND_IP=$(aws ec2 decribe-instance --filters "Name=tag-value,Values=backend-*" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text)
             export API_URL="http://${BACKEND_URL}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_URL}" >> frontend/.env
