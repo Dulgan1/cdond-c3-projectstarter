@@ -251,12 +251,15 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["0c:9b:a0:5e:35:f3:57:69:1f:12:bf:3a:21:5a:19:5d"]
       - run:
+          name: Install Tar Gzip
           command: |
             apk add --update tar gzip
       - run:
+          name: Install Ansible
           command: |
             apk add --update ansible
       - run:
+          name: Install NodeJs
           command: |
             apk add --update nodejs
       - run:
@@ -269,6 +272,10 @@ jobs:
             && pip3 install \
             awscli \
             && rm -rf /var/cache/apk/*
+      - run:
+          name: Install NPM
+          command: |
+            apk add --update npm
       - attach_workspace:
           at: ~/
       - run:
