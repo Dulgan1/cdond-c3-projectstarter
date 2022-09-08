@@ -221,7 +221,7 @@ jobs:
       - run:
           name: Get Backend Url
           command: |
-            export BACKEND_IP=$(aws ec2 decribe-instance --filters "Name=tag-value,Values=backend-*" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text)
+            export BACKEND_IP=$(aws ec2 describe-instance --filters "Name=tag-value,Values=backend-*" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text)
             export API_URL="http://${BACKEND_URL}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_URL}" >> frontend/.env
@@ -252,25 +252,25 @@ jobs:
           fingerprints: ["0c:9b:a0:5e:35:f3:57:69:1f:12:bf:3a:21:5a:19:5d"]
       - run:
           command: |
-            sudo apt-get update
+            apt-get update
       - run:
           command: |
-            sudo apt-get  -y install tar gzip
+            apt-get  -y install tar gzip
       - run:
           command: |
-            sudo apt -y install python3
+            apt -y install python3
       - run:
           command: |
-            sudo apt-get --update ansible
+            apt-get --update ansible
       - run:
           command: |
             npm install
       - run:
           command: | 
-            sudo  apt-get -y install nodejs
+            apt-get -y install nodejs
       - run:
           command: |
-            sudo apt-get install awscli
+            apt-get install awscli
       - attach_workspace:
           at: ~/
       - run:
