@@ -252,25 +252,16 @@ jobs:
           fingerprints: ["0c:9b:a0:5e:35:f3:57:69:1f:12:bf:3a:21:5a:19:5d"]
       - run:
           command: |
-            apt-get update
+            apk add --update tar gzip
       - run:
           command: |
-            apt-get  -y install tar gzip
+            apk add --update ansible
       - run:
           command: |
-            apt -y install python3
+            apk add --update nodejs
       - run:
           command: |
-            apt-get --update ansible
-      - run:
-          command: |
-            npm install
-      - run:
-          command: | 
-            apt-get -y install nodejs
-      - run:
-          command: |
-            apt-get install awscli
+            apk add --update awscli
       - attach_workspace:
           at: ~/
       - run:
