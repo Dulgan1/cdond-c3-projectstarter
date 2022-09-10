@@ -137,6 +137,7 @@ jobs:
             --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --parameter-overrides  ID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
+            aws ec2 describe-instance --filters "Name=tag-value,Values=backend-*" --query 'Reservations[*].Instances[*].[PublicIpAddress]' >> project/.circleci/ansible/inventory.txt
       - run:
           name: Ensure Backend Infrastructure Exists
           command: |
@@ -156,10 +157,8 @@ jobs:
       - checkout
       - add_ssh_keys: 
           fingerprints: ["0c:9b:a0:5e:35:f3:57:69:1f:12:bf:3a:21:5a:19:5d"]
-      - persist_to_workspace:
-          root: ~/
-          paths: 
-            - project/.circleci/ansible/
+      - attach_workspace:
+          at: ~/
       - run: 
           name: Install Dependencies
           command: |
@@ -324,12 +323,12 @@ workflows:
       - configure-infrastructure:
           context: CircleBot
           requires: [deploy-infrastructure]
-      - run-migrations:
-          context: CircleBot
-          requires: [configure-infrastructure]
-      - deploy-frontend:
-          context: CircleBot
-          requires: [run-migrations]
-      - deploy-backend:
-          context: CircleBot
-          requires: [deploy-frontend]
+#      - run-migrations:
+#          context: CircleBot
+#          requires: [configure-infrastructure]
+#      - deploy-frontend:
+#          context: CircleBot
+#          requires: [run-migrations]
+#      - deploy-backend:
+#          context: CircleBot
+#          requires: [deploy-frontend]
