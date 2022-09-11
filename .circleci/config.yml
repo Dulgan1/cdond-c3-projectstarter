@@ -298,19 +298,19 @@ jobs:
     steps:
         - checkout
         - run:
-            name: Install Dependencies: Curl
+            name: Install Dependency Curl
             command: |
               apk add curl
         - run:
-            name: Install Dependency: NodeJs
+            name: Install Dependency NodeJs
             command: |
               apk add nodejs
         - run:
-            name: Install Dependency: NPM
+            name: Install Dependency NPM
             command: |
               apk add npm
         - run:
-            name:
+            name: Install Dependency AWS CLI
             command: |
               apk add awscli
         - run:
