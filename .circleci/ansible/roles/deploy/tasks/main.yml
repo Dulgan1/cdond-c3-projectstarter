@@ -27,7 +27,7 @@
     state: latest
 - name: "Create ~/web"
   become: true
-  ansible.builtin.file:
+  file:
     path: ~/web
     state: directory
     mode: '0755'
@@ -39,7 +39,7 @@
     backup: true
 - name: "Unzip Artifact.tar.gz"
   become: true
-  ansible.buitin.unarchive:
+  unarchive:
     src: ~/web/artifact.tar.gz
     dest: ~/web
     backup: true
