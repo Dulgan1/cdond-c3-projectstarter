@@ -171,7 +171,7 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
   run-migrations:
     docker:
-      - image: circleci/node:13i.8.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
@@ -377,3 +377,6 @@ workflows:
       - deploy-backend:
           context: CircleBot
           requires: [deploy-frontend]
+      - smoke-test:
+          context: CircleBot
+          requires: [deploy-backend]
