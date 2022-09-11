@@ -293,8 +293,9 @@ jobs:
       - destroy-environment
       - revert-migration
   smoke-test:
-    docker: python:3.7-alpine3.11
-      steps:
+    docker: 
+      - image: python:3.7-alpine3.11
+    steps:
         - checkout
         - run:
             name: Install Dependencies: Curl
