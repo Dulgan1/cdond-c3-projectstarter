@@ -194,33 +194,33 @@ jobs:
     #      name: Install NodeJs
     #      command: |
     #        sudo apt-get install npm
-       - run:
-           name: Install Tar Gzip
-           command: |
-             apk add --update tar gzip
-       - run:
-           name: Install Ansible
-           command: |
-             apk add --update ansible
-       - run:
-           name: Install NodeJs
-           command: |
-             apk add --update nodejs
-       - run:
-           name: Installing AWS CLI
-           command: |
-             apk add --no-cache \
-             python3 \
-             py3-pip \
-             && pip3 install --upgrade pip \
-             && pip3 install \
-             awscli \
-             && rm -rf /var/cache/apk/*
-       - run:
-           name: Install NPM
-           command: |
-             apk add --update npm
-       - run:
+      - run:
+          name: Install Tar Gzip
+          command: |
+            apk add --update tar gzip
+      - run:
+          name: Install Ansible
+          command: |
+            apk add --update ansible
+      - run:
+          name: Install NodeJs
+          command: |
+            apk add --update nodejs
+      - run:
+          name: Installing AWS CLI
+          command: |
+            apk add --no-cache \
+            python3 \
+            py3-pip \
+            && pip3 install --upgrade pip \
+            && pip3 install \
+            awscli \
+            && rm -rf /var/cache/apk/*
+      - run:
+          name: Install NPM
+          command: |
+            apk add --update npm
+      - run:
           name: Configure Server
           command: |
             cd .circleci/ansible
