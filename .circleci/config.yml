@@ -162,64 +162,37 @@ jobs:
       - destroy-environment
   configure-infrastructure:
     docker:
-      - image: python:3.7-alpine3.11
-      # - image: cimg/base:2021.04
-      #  auth:
-      #    username: dulgan
-      #    password: $DOCKERHUB_PASSWORD
+      - image: cimg/base:2021.04
+        auth:
+          username: dulgan
+          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
       - add_ssh_keys: 
           fingerprints: ["0c:9b:a0:5e:35:f3:57:69:1f:12:bf:3a:21:5a:19:5d"]
       - attach_workspace:
           at: ~/
-    #  - run:
-    #      command: |
-    #        sudo apt-get update
-    #  - run:
-    #      name: Install AWS CLI
-    #      command: |
-    #        sudo apt-get install awscli
-    #  - run:
-    #      name: Install Python
-    #      command: |
-    #        sudo apt-get install python3
-    #  - run:
-    #      command: |
-    #        sudo apt-get install ansible
-    #  - run:
-    #      command: |
-    #        sudo apt-get -y install tar gzip
-    #  - run:
-    #      name: Install NodeJs
-    #      command: |
-    #        sudo apt-get install npm
       - run:
-          name: Install Tar Gzip
           command: |
-            apk add --update tar gzip
+            sudo apt-get update
       - run:
-          name: Install Ansible
+          name: Install AWS CLI
           command: |
-            apk add --update ansible
+            sudo apt-get install awscli
+      - run:
+          name: Install Python
+          command: |
+            sudo apt-get install python3
+      - run:
+          command: |
+            sudo apt-get install ansible
+      - run:
+          command: |
+            sudo apt-get -y install tar gzip
       - run:
           name: Install NodeJs
           command: |
-            apk add --update nodejs
-      - run:
-          name: Installing AWS CLI
-          command: |
-            apk add --no-cache \
-            python3 \
-            py3-pip \
-            && pip3 install --upgrade pip \
-            && pip3 install \
-            awscli \
-            && rm -rf /var/cache/apk/*
-      - run:
-          name: Install NPM
-          command: |
-            apk add --update npm
+            sudo apt-get install npm
       - run:
           name: Configure Server
           command: |
