@@ -161,7 +161,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys: 
-          fingerprints: ["a8:cc:8c:d2:88:af:1b:3a:fd:22:15:08:c1:05:9c:47"]
+          fingerprints: ["0c:9b:a0:5e:35:f3:57:69:1f:12:bf:3a:21:5a:19:5d"]
       - attach_workspace:
           at: ~/
       - run:
@@ -188,7 +188,6 @@ jobs:
           
       - run:
           name: Configure Server
-          no_output_timeout: 30m
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
@@ -272,7 +271,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["a8:cc:8c:d2:88:af:1b:3a:fd:22:15:08:c1:05:9c:47"]
+          fingerprints: ["0c:9b:a0:5e:35:f3:57:69:1f:12:bf:3a:21:5a:19:5d"]
       - run:
           name: Install Tar Gzip
           command: |
