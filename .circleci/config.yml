@@ -166,6 +166,7 @@ jobs:
             apk add --update ansible
       - run:
           name: Configure Server
+          no_output_timeout: 30m
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
