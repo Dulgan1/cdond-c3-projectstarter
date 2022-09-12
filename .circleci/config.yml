@@ -14,6 +14,14 @@ commands:
     description: Destroy  infrastructure on fail
     steps:
       - run:
+          name: Delete S3 bucket files
+          when: on_fail
+          command: |
+            if aws s3api head-bucket --bucket udapeople-s3bucket-${CIRCLE_WORKFLOW_ID}
+            then
+                aws s3 rm s3://udapeople-s3bucket-${CIRCLE_WORKFLOW_ID}/ --recursive
+            fi
+      - run:
           name: Destroy Backend Environment
           when: on_fail
           command: |
@@ -190,7 +198,8 @@ jobs:
           name: Configure Server
           command: |
             cd .circleci/ansible
-            ansible-playbook -i inventory.txt configure-server.yml
+            sudo ansible-playbook -i inventory.txt configure-server.yml
+      - destroy-environment
   run-migrations:
     docker:
       - image: circleci/node:13.8.0
