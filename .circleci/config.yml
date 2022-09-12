@@ -147,6 +147,7 @@ jobs:
             --parameter-overrides  ID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
             aws ec2 describe-instances --filters "Name=tag-value,Values=backend-*" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text >> .circleci/ansible/inventory.txt
+            sed '/None/d' .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
       - run:
           name: Ensure Backend Infrastructure Exists
