@@ -224,7 +224,7 @@ jobs:
           name: Configure Server
           command: |
             cd .circleci/ansible
-            sudo ansible-playbook -i inventory.txt configure-server.yml
+            ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment
   run-migrations:
     docker:
