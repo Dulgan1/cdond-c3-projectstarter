@@ -169,18 +169,22 @@ jobs:
             sudo apt-get update
       - run:
           name: Install AWS CLI
-          command:                                                          sudo apt-get install awscli
+          command: |
+            sudo apt-get install awscli
       - run:
           name: Install Python
-          command: |                                                        sudo apt-get install python3
+          command: |
+            sudo apt-get install python3
       - run:
           command: |
             sudo apt-get install ansible
       - run:
-          command: |                                                        sudo apt-get -y install tar gzip
+          command: |
+            sudo apt-get -y install tar gzip
       - run:
           name: Install NodeJs
-          command: |                                                        sudo apt-get install npm
+          command: |
+            sudo apt-get install npm
           
       - run:
           name: Configure Server
