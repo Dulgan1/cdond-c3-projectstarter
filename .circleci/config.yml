@@ -154,17 +154,34 @@ jobs:
       - destroy-environment
   configure-infrastructure:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: cimg/base:2021.04
+        auth:
+          username: dulgan
+          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
       - add_ssh_keys: 
           fingerprints: ["a8:cc:8c:d2:88:af:1b:3a:fd:22:15:08:c1:05:9c:47"]
       - attach_workspace:
           at: ~/
-      - run: 
-          name: Install Dependencies
+      - run:
           command: |
-            apk add --update ansible
+            sudo apt-get update
+      - run:
+          name: Install AWS CLI
+          command:                                                          sudo apt-get install awscli
+      - run:
+          name: Install Python
+          command: |                                                        sudo apt-get install python3
+      - run:
+          command: |
+            sudo apt-get install ansible
+      - run:
+          command: |                                                        sudo apt-get -y install tar gzip
+      - run:
+          name: Install NodeJs
+          command: |                                                        sudo apt-get install npm
+          
       - run:
           name: Configure Server
           no_output_timeout: 30m
