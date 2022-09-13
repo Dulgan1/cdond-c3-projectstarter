@@ -33,8 +33,8 @@
     mode: '0755'
 - name: "Copy Files"
   become: true
-  remote_src: true
   copy:
+    remote_src: true
     src: artifact.tar.gz
     dest: ~/web
     backup: true
