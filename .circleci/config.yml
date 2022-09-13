@@ -164,7 +164,6 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
-      - slack/status
   configure-infrastructure:
     docker:
       - image: cimg/base:2021.04
@@ -222,7 +221,6 @@ jobs:
             then
                 curl https://kvdb.io/2mcLRs5u4GEpSogUWhb9Je/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
-      - slack/status
   deploy-frontend:
     docker:
       - image: cimg/base:2021.04
@@ -277,7 +275,6 @@ jobs:
               aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment
       - revert-migration
-      - slack/status
   deploy-backend:
     docker:
       - image: cimg/base:2021.04
@@ -325,7 +322,6 @@ jobs:
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
       - revert-migration
-      - slack/status
   smoke-test:
     docker: 
       - image: python:3.7-alpine3.11
@@ -372,7 +368,6 @@ jobs:
             fi
       - destroy-environment
       - revert-migration
-      - slack/status
   cloudfront-update:
     docker:
       - image: amazon/aws-cli
@@ -382,7 +377,6 @@ jobs:
           name: Update CloudFront Stack
           command:
             aws cloudformation deploy --template-file .circleci/files/cloudfront.yml --stack-name InitialStack --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --tags project=udapeople
-      - slack/status
   cleanup-oldinfra:
     docker:
       - image: amazon/aws-cli
@@ -402,7 +396,6 @@ jobs:
              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
           fi
-      - slack/status
       - destroy-environment
       - revert-migration
 workflows:
