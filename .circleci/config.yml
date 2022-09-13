@@ -164,6 +164,8 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
+      - notify_pass
+      - notify_error
   configure-infrastructure:
     docker:
       - image: cimg/base:2021.04
@@ -203,6 +205,8 @@ jobs:
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment
+      - notify_pass
+      - notify_error
   run-migrations:
     docker:
       - image: circleci/node:13.8.0
@@ -221,6 +225,8 @@ jobs:
             then
                 curl https://kvdb.io/2mcLRs5u4GEpSogUWhb9Je/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
+      - notify_pass
+      - notify_error
   deploy-frontend:
     docker:
       - image: cimg/base:2021.04
@@ -268,48 +274,46 @@ jobs:
       - run:
           name: Deploy frontend objects
           command: |
-
-
               cd frontend
               npm install
               npm run build
               tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
               aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      - notify_pass
+      - notify_error
       - destroy-environment
       - revert-migration
   deploy-backend:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: cimg/base:2021.4
+        auth:
+          username: dulgan
+          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints: ["0c:9b:a0:5e:35:f3:57:69:1f:12:bf:3a:21:5a:19:5d"]
       - run:
-          name: Install Tar Gzip
           command: |
-            apk add --update tar gzip
+            sudo apt-get update
       - run:
-          name: Install Ansible
+          name: Install AWS CLI
+          command:
+            sudo apt-get install awscli
+      - run:
+          name: Install Python
           command: |
-            apk add --update ansible
+            sudo apt-get install python3
+      - run:
+          command: |
+            sudo apt-get install ansible
+      - run:
+          command: |
+            sudo apt-get -y install tar gzip
       - run:
           name: Install NodeJs
           command: |
-            apk add --update nodejs
-      - run:
-          name: Installing AWS CLI
-          command: |
-            apk add --no-cache \
-            python3 \
-            py3-pip \
-            && pip3 install --upgrade pip \
-            && pip3 install \
-            awscli \
-            && rm -rf /var/cache/apk/*
-      - run:
-          name: Install NPM
-          command: |
-            apk add --update npm
+            sudo apt-get install npm
       - attach_workspace:
           at: ~/
       - run:
@@ -324,6 +328,8 @@ jobs:
             echo "Content of the inventory.txt file is ---"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
+      - notify_pass
+      - notify_error
       - destroy-environment
       - revert-migration
   smoke-test:
@@ -370,6 +376,8 @@ jobs:
             else
                 return 1
             fi
+      - notify_pass
+      - notify_error
       - destroy-environment
       - revert-migration
 workflows:
