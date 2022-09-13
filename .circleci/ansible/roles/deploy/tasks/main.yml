@@ -34,7 +34,6 @@
 - name: "Copy Files"
   become: true
   copy:
-    remote_src: true
     src: artifact.tar.gz
     dest: /home/ubuntu/web
     backup: true
