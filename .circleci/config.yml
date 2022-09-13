@@ -1,4 +1,6 @@
 version: 2.1
+
+
 commands:
   notify_error:
     steps:
@@ -38,6 +40,7 @@ commands:
           name: Reverting Last Migration
           when: on_fail
           command: |
+            SUCCESS=$(curl --insecure https://kvdb.io/2mcLRs5u4GEpSogUWhb9Je/migration_${CIRCLE_WORKFLOW_ID:0:7)
             SUCCESS=1
             if (( $SUCCESS=1 ));
             then
@@ -146,7 +149,7 @@ jobs:
             --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --parameter-overrides  ID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
-            aws ec2 describe-instances --filters "Name=tag-value,Values=backend-*" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text >> .circleci/ansible/inventory.txt
+            aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text >> .circleci/ansible/inventory.txt
             sed '/None/d' .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
       - run:
@@ -252,7 +255,7 @@ jobs:
       - run:
           name: Get Backend Url
           command: |
-            export BACKEND_IP=$(aws ec2 describe-instance --filters "Name=tag-value,Values=backend-*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
+            export BACKEND_IP=$(aws ec2 describe-instance --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
             export API_URL="http://${BACKEND_URL}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_URL}" >> frontend/.env
@@ -327,46 +330,48 @@ jobs:
     docker: 
       - image: python:3.7-alpine3.11
     steps:
-        - checkout
-        - run:
-            name: Install Dependency Curl
-            command: |
-              apk add curl
-        - run:
-            name: Install Dependency NodeJs
-            command: |
-              apk add nodejs
-        - run:
-            name: Install Dependency NPM
-            command: |
-              apk add npm
-        - run:
-            name: Install Dependency AWS CLI
-            command: |
-              apk add awscli
-        - run:
-            name: Backend Smoke-Test
-            command: |
-              export BACKEND_IP=$(aws ec2 describe-instance --filters "Name=tag-value,Values=backend-*" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text)
-              export API_URL="http://${BACKEND_IP}:3030"
-              echo "${API_URL}"
-              if curl "${API_URL}/api/status" | grep "ok"
-              then
-                  return 0
-              else
-                  return 1
-              fi
-        - run:
-            name: Frontend Smoke-Test
-            command:
-              URL=http://"udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"
-              echo "${URL}"
-              if curl -s "${URL}" | grep "Welcome"
-              then
-                  return 1
-              else
-                  return 1
-              fi
+      - checkout
+      - run:
+          name: Install Dependency Curl
+          command: |
+            apk add curl
+      - run:
+          name: Install Dependency NodeJs
+          command: |
+            apk add nodejs
+      - run:
+          name: Install Dependency NPM
+          command: |
+            apk add npm
+      - run:
+          name: Install Dependency AWS CLI
+          command: |
+            apk add awscli
+      - run:
+          name: Backend Smoke-Test
+          command: |
+            export BACKEND_IP=$(aws ec2 describe-instance --filters "Name=tag-value,Values=backend-*" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+            if curl "${API_URL}/api/status" | grep "ok"
+            then
+                return 0
+            else
+                return 1
+            fi
+      - run:
+          name: Frontend Smoke-Test
+          command:
+            URL=http://"udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"
+            echo "${URL}"
+            if curl -s "${URL}" | grep "Welcome"
+            then
+                return 1
+            else
+                return 1
+            fi
+      - destroy-environment
+      - revert-migration
 workflows:
   default:
     jobs:
