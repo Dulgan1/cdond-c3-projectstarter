@@ -28,21 +28,20 @@
 - name: "Create ~/web"
   become: true
   file:
-    path: ~/web
+    path: /home/ubuntu/web
     state: directory
     mode: '0755'
 - name: "Copy Files"
   become: true
   copy:
-    remote_src: true
     src: artifact.tar.gz
-    dest: ~/web
+    dest: /home/ubuntu/web
     backup: true
 - name: "Unzip Artifact.tar.gz"
   become: true
   unarchive:
-    src: ~/web/artifact.tar.gz
-    dest: ~/web
+    src: home/ubuntu/web/artifact.tar.gz
+    dest: home/ubuntu/web
     backup: true
 - name: "Npm Install"
   become: true
