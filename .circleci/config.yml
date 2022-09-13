@@ -164,8 +164,6 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
-      - notify_pass
-      - notify_error
   configure-infrastructure:
     docker:
       - image: cimg/base:2021.04
@@ -205,8 +203,6 @@ jobs:
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment
-      - notify_pass
-      - notify_error
   run-migrations:
     docker:
       - image: circleci/node:13.8.0
@@ -225,8 +221,6 @@ jobs:
             then
                 curl https://kvdb.io/2mcLRs5u4GEpSogUWhb9Je/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
-      - notify_pass
-      - notify_error
   deploy-frontend:
     docker:
       - image: cimg/base:2021.04
@@ -279,8 +273,6 @@ jobs:
               npm run build
               tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
               aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-      - notify_pass
-      - notify_error
       - destroy-environment
       - revert-migration
   deploy-backend:
@@ -328,8 +320,6 @@ jobs:
             echo "Content of the inventory.txt file is ---"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - notify_pass
-      - notify_error
       - destroy-environment
       - revert-migration
   smoke-test:
@@ -376,8 +366,6 @@ jobs:
             else
                 return 1
             fi
-      - notify_pass
-      - notify_error
       - destroy-environment
       - revert-migration
 workflows:
