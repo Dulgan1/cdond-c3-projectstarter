@@ -318,6 +318,7 @@ jobs:
             cd .circleci/ansible
             echo "Content of the inventory.txt file is ---"
             cat inventory.txt
+            cp artifact.tar.gz home/circleci/project/.circleci/ansible/files
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
       - revert-migration
