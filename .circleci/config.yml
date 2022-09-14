@@ -317,7 +317,7 @@ jobs:
             tar -C backend -czvf backend.tar.gz .
             pwd
             ls -a
-            #mv backend.tar.gz ~/.circleci/ansible/roles/deploy/files/artifact.tar.gz
+            cp backend.tar.gz /app/.circleci/ansible/roles/deploy/files
             cd .circleci/ansible
             pwd 
             ls -a

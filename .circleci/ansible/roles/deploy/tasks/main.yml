@@ -38,7 +38,7 @@
 - name: "Copy Files"
   become: true
   copy:
-    src: files/artifact.tar.gz
+    src: backend.tar.gz
     dest: /home/ubuntu/web
     backup: true
 - name: "Unzip Artifact.tar.gz"
