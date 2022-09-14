@@ -318,7 +318,6 @@ jobs:
             export SCP_HOST=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
             pwd
             ls -a
-            mkdir ~/.ssh/known_hosts
             ssh-keyscan -H $SCP_HOST >> ~/.ssh/known_hosts
             scp backend.tar.gz ubuntu@$SCP_HOST:/home/ubuntu
             # cp /home/circleci/project/backend.tar.gz /home/circleci/project/.circleci/ansible/roles/deploy/files
