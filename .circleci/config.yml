@@ -315,9 +315,11 @@ jobs:
             npm run build
             cd ..
             tar -C backend -czvf backend.tar.gz .
+            export SCP_HOST=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
             pwd
             ls -a
-            cp /home/circleci/project/backend.tar.gz /home/circleci/project/.circleci/ansible/roles/deploy/files
+            scp backend.tar.gz ubuntu@$SCP_HOST:/home/ubuntu
+            # cp /home/circleci/project/backend.tar.gz /home/circleci/project/.circleci/ansible/roles/deploy/files
             cd .circleci/ansible
             pwd 
             ls -a
