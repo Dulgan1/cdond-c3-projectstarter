@@ -23,7 +23,7 @@
     #- name: "update yum packages"
     #become: true
     #yum:
-    update-cache: true
+    #update-cache: true
     #- name: "upgrade packages"
     #become: true
     #yum:
