@@ -32,6 +32,9 @@
     #yum:
     #name: "*"
     #state: latest
+- name: "Print working directory"
+  become: true
+  shell: pwd
 - name: "Create ~/web"
   become: true
   file:
