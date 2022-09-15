@@ -38,10 +38,10 @@
 - name: "Copy Files"
   become: true
   copy:
-    remote_src: true
     src: backend.tar.gz
     dest: /home/ubuntu/web
     backup: true
+    remote_src: yes
 - name: "Unzip Artifact.tar.gz"
   become: true
   unarchive:
