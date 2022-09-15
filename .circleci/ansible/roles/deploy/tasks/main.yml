@@ -13,9 +13,11 @@
     name: ["nodejs", "npm", "tar", "gzip"]
     state: latest
     update_cache: yes
-- name:
+- name: "Install tar, gzip, zip"
   become:  true
-  shell: apt-get -y install tar gzip
+  shell: |
+    apt-get install zip
+    apt-get -y install tar gzip
 - name: "Install pm2"
   become: true
   npm:
