@@ -45,7 +45,7 @@
   become: true
   copy:
     src: backend.tar.gz
-    dest: home/ubuntu/web
+    dest: ./web
     backup: true
     remote_src: yes
 - name: "Change working directory"
@@ -54,8 +54,8 @@
 - name: "Unzip backend.tar.gz"
   become: true
   unarchive:
-    src: home/ubuntu/web/backend.tar.gz
-    dest: .
+    src: ./web/backend.tar.gz
+    dest: ./web
     backup: true
     remote_src: true
 - name: "Executing"
