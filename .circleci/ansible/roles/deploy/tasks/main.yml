@@ -48,6 +48,7 @@
     src: home/ubuntu/web/backend.tar.gz
     dest: home/ubuntu/web
     backup: true
+    remote_src: true
 - name: "Executing"
   shell: |
     npm install
