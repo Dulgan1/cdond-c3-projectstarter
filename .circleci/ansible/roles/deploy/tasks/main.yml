@@ -49,7 +49,7 @@
   become: true
   unarchive:
     src: home/ec2-user/web/backend.tar.gz
-    dest: home/ec2-user/web
+    dest: .
     backup: true
     remote_src: true
 - name: "Executing"
