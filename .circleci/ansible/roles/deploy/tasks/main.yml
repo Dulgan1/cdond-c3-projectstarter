@@ -23,7 +23,7 @@
 - name: "Print WD"
   become: true
   shell: |
-    W_DIR="/"
+    PW_DIR="/"
     pwd > $PW_DIR
     #- name: "update yum packages"
     #become: true
@@ -37,21 +37,21 @@
 - name: "Create ~/web"
   become: true
   file:
-    path: ${W_DIR}/web
+    path: ${PW_DIR}/web
     state: directory
     mode: '0755'
 - name: "Copy Files"
   become: true
   copy:
     src: backend.tar.gz
-    dest: ${W_DIR}/web
+    dest: ${PW_DIR}/web
     backup: true
     remote_src: yes
 - name: "Unzip backend.tar.gz"
   become: true
   unarchive:
-    src: ${W_DIR}/web/backend.tar.gz
-    dest: ${W_DIR}/web
+    src: ${PW_DIR}/web/backend.tar.gz
+    dest: ${PW_DIR}/web
     backup: true
     remote_src: true
 - name: "Executing"
