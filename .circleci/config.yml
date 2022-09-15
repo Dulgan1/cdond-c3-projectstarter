@@ -314,16 +314,11 @@ jobs:
             npm install
             npm run build
             cd ..
-            tar -C backend -czvf backend.tar.gz .
+            tar -C backend -czvf artifact.tar.gz .
             export SCP_HOST=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
-            pwd
-            ls -a
             ssh-keyscan -H $SCP_HOST >> ~/.ssh/known_hosts
-            scp backend.tar.gz ubuntu@$SCP_HOST:/home/ubuntu
-            # cp /home/circleci/project/backend.tar.gz /home/circleci/project/.circleci/ansible/roles/deploy/files
+            scp artifact.tar.gz ubuntu@$SCP_HOST:/home/ubuntu
             cd .circleci/ansible
-            pwd 
-            ls -a
             echo "Content of the inventory.txt file is ---"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml

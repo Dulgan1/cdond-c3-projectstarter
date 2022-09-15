@@ -23,45 +23,25 @@
     global: yes
     production: yes
     state: present
-- name: "Print WD"
-  become: true
-  shell: pwd
-    #- name: "update yum packages"
+    #- name: "Create ~/web"
     #become: true
-    #yum:
-    #update-cache: true
-    #- name: "upgrade packages"
+    #file:
+    #path: web
+    #state: directory
+    #mode: '0755'
+    #- name: "Copy Files"
     #become: true
-    #yum:
-    #name: "*"
-    #state: latest
-- name: "Print working directory"
-  become: true
-  shell: pwd
-- name: "Create ~/web"
-  become: true
-  file:
-    path: web
-    state: directory
-    mode: '0755'
-- name: "Copy Files"
-  become: true
-  copy:
-    src: backend.tar.gz
-    dest: ./web
-    backup: true
-    remote_src: yes
-- name: "Change working directory"
-  become: true
-  shell: cd web
+    #copy:
+    #src: artifact.tar.gz
+    #dest: ./web
+    #backup: true
+    #remote_src: yes
+    #- name: "Change working directory"
+    #become: true
+    #shell: cd web
 - name: "Unzip backend.tar.gz"
   become: true
-  shell: tar -xvzf backend.tar.gz
-  #unarchive:
-  # src: ./web/backend.tar.gz
-  # dest: ./web
-  # backup: true
-  # remote_src: true
+  shell: tar -xvzf artifact.tar.gz
 - name: "Executing"
   shell: |
     npm install
