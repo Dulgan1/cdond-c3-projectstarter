@@ -15,9 +15,7 @@
     update_cache: yes
 - name: "Install tar, gzip, zip"
   become:  true
-  shell: |
-    apt-get install zip
-    apt-get -y install tar gzip
+  shell: apt-get -y install tar gzip
 - name: "Install pm2"
   become: true
   npm:
@@ -58,11 +56,12 @@
   shell: cd web
 - name: "Unzip backend.tar.gz"
   become: true
-  unarchive:
-    src: ./web/backend.tar.gz
-    dest: ./web
-    backup: true
-    remote_src: true
+  shell: tar –xvzf backend.tar.gz 
+  #unarchive:
+  # src: ./web/backend.tar.gz
+  # dest: ./web
+  # backup: true
+  # remote_src: true
 - name: "Executing"
   shell: |
     npm install
