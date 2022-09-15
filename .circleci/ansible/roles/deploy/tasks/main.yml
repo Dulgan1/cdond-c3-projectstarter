@@ -13,6 +13,9 @@
     name: ["nodejs", "npm", "tar", "gzip"]
     state: latest
     update_cache: yes
+- name:
+  become:
+  shell: apt-get -y install tar gzip
 - name: "Install pm2"
   become: true
   npm:
