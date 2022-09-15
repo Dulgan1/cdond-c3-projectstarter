@@ -42,10 +42,10 @@
     dest: /home/ubuntu/web
     backup: true
     remote_src: yes
-- name: "Unzip Artifact.tar.gz"
+- name: "Unzip backend.tar.gz"
   become: true
   unarchive:
-    src: home/ubuntu/web/artifact.tar.gz
+    src: home/ubuntu/web/backend.tar.gz
     dest: home/ubuntu/web
     backup: true
 - name: "Executing"
