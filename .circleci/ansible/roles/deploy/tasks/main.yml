@@ -56,7 +56,7 @@
   shell: cd web
 - name: "Unzip backend.tar.gz"
   become: true
-  shell: tar –xvzf backend.tar.gz 
+  shell: tar -xvzf backend.tar.gz
   #unarchive:
   # src: ./web/backend.tar.gz
   # dest: ./web
