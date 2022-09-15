@@ -20,6 +20,11 @@
     global: yes
     production: yes
     state: present
+- name: "Print WD"
+  become: true
+  shell: |
+    W_DIR="/"
+    pwd > $PW_DIR
     #- name: "update yum packages"
     #become: true
     #yum:
@@ -32,21 +37,21 @@
 - name: "Create ~/web"
   become: true
   file:
-    path: /home/ubuntu/web
+    path: ${W_DIR}/web
     state: directory
     mode: '0755'
 - name: "Copy Files"
   become: true
   copy:
     src: backend.tar.gz
-    dest: /home/ubuntu/web
+    dest: ${W_DIR}/web
     backup: true
     remote_src: yes
 - name: "Unzip backend.tar.gz"
   become: true
   unarchive:
-    src: home/ubuntu/web/backend.tar.gz
-    dest: home/ubuntu/web
+    src: ${W_DIR}/web/backend.tar.gz
+    dest: ${W_DIR}/web
     backup: true
     remote_src: true
 - name: "Executing"
