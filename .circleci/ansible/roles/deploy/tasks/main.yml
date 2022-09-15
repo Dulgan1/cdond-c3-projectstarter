@@ -10,7 +10,7 @@
 - name: "Install dependencies"
   become: true
   apt:
-    name: ["nodejs", "npm"]
+    name: ["nodejs", "npm", "tar", "gzip"]
     state: latest
     update_cache: yes
 - name: "Install pm2"
