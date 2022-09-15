@@ -14,7 +14,7 @@
     state: latest
     update_cache: yes
 - name:
-  become:
+  become:  true
   shell: apt-get -y install tar gzip
 - name: "Install pm2"
   become: true
