@@ -42,13 +42,16 @@
   become: true
   copy:
     src: backend.tar.gz
-    dest: home/ec2-user/web
+    dest: home/ubuntu/web
     backup: true
     remote_src: yes
+- name: "Change working directory"
+  become: true
+  shell: cd web
 - name: "Unzip backend.tar.gz"
   become: true
   unarchive:
-    src: home/ec2-user/web/backend.tar.gz
+    src: home/ubuntu/web/backend.tar.gz
     dest: .
     backup: true
     remote_src: true
