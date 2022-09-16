@@ -19,9 +19,9 @@ commands:
           name: Delete S3 bucket files
           when: on_fail
           command: |
-            if aws s3api head-bucket --bucket udapeople-s3bucket-${CIRCLE_WORKFLOW_ID}
+            if aws s3api head-bucket --bucket udapeople-${CIRCLE_WORKFLOW_ID:0:7}
             then
-                aws s3 rm s3://udapeople-s3bucket-${CIRCLE_WORKFLOW_ID}/ --recursive
+            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7/}/ --recursive
             fi
       - run:
           name: Destroy Backend Environment
@@ -326,25 +326,30 @@ jobs:
       - revert-migration
   smoke-test:
     docker: 
-      - image: python:3.7-alpine3.11
+      - image: cimg/base:2021.04
+        auth:
+          username: dulgan
+          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
       - run:
+          command: sudo apt-get update
+      - run:
           name: Install Dependency Curl
           command: |
-            apk add curl
+            sudo apt-get install curl
       - run:
           name: Install Dependency NodeJs
           command: |
-            apk add nodejs
+            sudo apt-get install nodejs
       - run:
           name: Install Dependency NPM
           command: |
-            apk add npm
+            sudo apt-get install npm
       - run:
           name: Install Dependency AWS CLI
           command: |
-            apk add awscli
+            sudo apt-get install awscli
       - run:
           name: Backend Smoke-Test
           command: |
