@@ -43,6 +43,7 @@
   become: true
   shell: tar -xvzf artifact.tar.gz
 - name: "Executing"
+  become: true
   shell: |
     npm install
     pm2 stop default
