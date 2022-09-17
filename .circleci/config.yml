@@ -278,6 +278,7 @@ jobs:
             npm run build
       - run:
           name: Deploy frontend objects
+          no-output-timeout: 6m
           command: |
               cd frontend
               npm install
