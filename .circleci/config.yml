@@ -207,12 +207,6 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-        # - run: 
-        # name: Install Dependencies
-        # command: |
-        #   sudo apt-get update
-        #   sudo apt-get install awscli
-        #    sudo apt-get install npm
       - run:
           name: Run Migrations
           command: |
