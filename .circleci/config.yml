@@ -204,18 +204,15 @@ jobs:
       - destroy-environment
   run-migrations:
     docker:
-      - image: cimg/base:2021.04
-        auth:
-          username: dulgan
-          password: $DOCKERHUB_PASSWORD
+      - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: 
-          name: Install Dependencies
-          command: |
-            sudo apt-get update
-            sudo apt-get install awscli
-            sudo apt-get install npm
+        # - run: 
+        # name: Install Dependencies
+        # command: |
+        #   sudo apt-get update
+        #   sudo apt-get install awscli
+        #    sudo apt-get install npm
       - run:
           name: Run Migrations
           command: |
