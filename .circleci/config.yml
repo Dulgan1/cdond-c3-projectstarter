@@ -204,14 +204,24 @@ jobs:
       - destroy-environment
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/base:2021.04
+        auth:
+          username: dulgan
+          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
+      - run: 
+          name: Install Dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install awscli
+            sudo apt-get install npm
       - run:
           name: Run Migrations
           command: |
             cd backend
             npm install
+            npm install migrations
             npm run  migrations > migrations_dump.txt
       - run:
           name: Send Migration status to kvdb.io
@@ -220,6 +230,8 @@ jobs:
             then
                 curl https://kvdb.io/2mcLRs5u4GEpSogUWhb9Je/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
+      - revert-migrations
+      - destroy-environment
   deploy-frontend:
     docker:
       - image: cimg/base:2021.04
