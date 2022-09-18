@@ -19,11 +19,27 @@ commands:
           name: Delete S3 bucket files
           when: on_fail
           command: |
-            if aws s3api head-bucket --bucket udapeople-${CIRCLE_WORKFLOW_ID:0:7}
-            then
-               aws s3 rm s3://udapeople-*/ --recursive
-               aws s3 rb s3://udapeople-*/ --force
-            fi
+            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}/ --recursive
+            aws s3 rb s3;//udapeople-${CIRCLE_WORKFLOW_ID:0:7}/ --force
+            aws s3api list-buckets --output text > todelete.txt
+            i=$(wc --line todelete.txt)
+            z=0
+            while [ $i -gt $z]
+            do
+                bucket=$(head -1 todelete.txt)
+                if [$bucket != "udapeople-ddsgkddsgkddsgk"]
+                then
+                    aws s3 rm s3://${bucket}/ --recursive
+                    aws s3 rb s3://${bucket}/ --force
+                else
+                    sed '1d' todelete.txt
+                fi
+            done
+            #if aws s3api head-bucket --bucket udapeople-${CIRCLE_WORKFLOW_ID:0:7}
+            #then
+            #   aws s3 rm s3://udapeople-*/ --recursive
+            #   aws s3 rb s3://udapeople-*/ --force
+            #fi
       - run:
           name: Destroy Backend Environment
           when: on_fail
@@ -33,7 +49,20 @@ commands:
           name: Destroy Frontend Environment
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name "udapeople-frontend-*"
+            aws cloudformation list-stacks --output text > todeletestack.txt
+            j=$(wc --line todeletestack.txt)
+            IS="InitialStack"
+            x=0
+            while [ $j -gt $x]
+            do
+                stack=$(head -1 todeletestack.txt)
+                if [$stack != $IS ]
+                    aws cloudformation delete-stack --stack-name "${stack}"
+                else
+                    sed '1d' todeletestack.txt
+                fi
+            done
+            # aws cloudformation delete-stack --stack-name "udapeople-frontend-*"
   revert-migration:
     description: Revert Last Migration
     steps:
@@ -404,9 +433,12 @@ jobs:
             echo STACKS=${STACKS[@]}
           if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkFlowID}" ]]
           then
+             echo "----------------------Delete Confirmed--------------------"
              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+          else
+             echo "-----------------------Cannot Delete-----------------------"
           fi
       - destroy-environment
       - revert-migration
@@ -442,19 +474,36 @@ workflows:
       - configure-infrastructure:
           context: CircleBot
           requires: [deploy-infrastructure]
+          filters:
+            branches:
+              only: [master]
       - run-migrations:
           context: CircleBot
           requires: [configure-infrastructure]
+          filters:
+            branches:
+              only: [master]
       - deploy-frontend:
           context: CircleBot
           requires: [run-migrations]
+          filters:
+            branches:
+              only: [master]
       - deploy-backend:
           context: CircleBot
           requires: [deploy-frontend]
+          filters:
+            branches:
+              only: [master]
       - smoke-test:
           context: CircleBot
           requires: [deploy-backend]
+          filters:
+            branches:
+              only: [master]
       - cloudfront-update:
           context: CircleBot
           requires: [smoke-test]
-
+          filters:
+            branches:
+              only: [master]
