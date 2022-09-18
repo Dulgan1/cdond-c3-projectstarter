@@ -32,6 +32,7 @@ commands:
                 then
                     aws s3 rm s3://${bucket}/ --recursive
                     aws s3 rb s3://${bucket}/ --force
+                    sed '1d' todelete.txt
                 else
                     sed '1d' todelete.txt
                 fi
@@ -61,6 +62,7 @@ commands:
                 if [ "$stack" != "$IS" ]
                 then
                     aws cloudformation delete-stack --stack-name "${stack}"
+                    sed '1d' todeletestack.txt
                else
                     sed '1d' todeletestack.txt
                 fi
