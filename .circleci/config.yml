@@ -21,7 +21,8 @@ commands:
           command: |
             if aws s3api head-bucket --bucket udapeople-${CIRCLE_WORKFLOW_ID:0:7}
             then
-            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}/ --recursive
+               aws s3 rm s3://udapeople-*/ --recursive
+               aws s3 rb s3://udapeople-*/ --force
             fi
       - run:
           name: Destroy Backend Environment
@@ -32,7 +33,7 @@ commands:
           name: Destroy Frontend Environment
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+            aws cloudformation delete-stack --stack-name "udapeople-frontend-*"
   revert-migration:
     description: Revert Last Migration
     steps:
