@@ -22,12 +22,13 @@ commands:
             aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}/ --recursive
             aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}/ --force
             aws s3api list-buckets --output text > todelete.txt
+            cat todelete.txt
             i=$(wc --line todelete.txt)
             z=0
             while [ $i -gt $z ]
             do
                 bucket=$(head -1 todelete.txt)
-                if [ $bucket != "udapeople-ddsgkddsgkddsgk" ]
+                if [ "$bucket" != "udapeople-ddsgkddsgkddsgk" ]
                 then
                     aws s3 rm s3://${bucket}/ --recursive
                     aws s3 rb s3://${bucket}/ --force
@@ -50,13 +51,14 @@ commands:
           when: on_fail
           command: |
             aws cloudformation list-stacks --output text > todeletestack.txt
+            cat todeletestack.txt
             j=$(wc --line todeletestack.txt)
             IS="InitialStack"
             x=0
             while [ $j -gt $x ]
             do
                 stack=$(head -1 todeletestack.txt)
-                if [ $stack != $IS ]
+                if [ "$stack" != "$IS" ]
                 then
                     aws cloudformation delete-stack --stack-name "${stack}"
                 else
