@@ -24,10 +24,10 @@ commands:
             aws s3api list-buckets --output text > todelete.txt
             i=$(wc --line todelete.txt)
             z=0
-            while [ $i -gt $z]
+            while [ $i -gt $z ]
             do
                 bucket=$(head -1 todelete.txt)
-                if [$bucket != "udapeople-ddsgkddsgkddsgk"]
+                if [ $bucket != "udapeople-ddsgkddsgkddsgk" ]
                 then
                     aws s3 rm s3://${bucket}/ --recursive
                     aws s3 rb s3://${bucket}/ --force
@@ -53,10 +53,10 @@ commands:
             j=$(wc --line todeletestack.txt)
             IS="InitialStack"
             x=0
-            while [ $j -gt $x]
+            while [ $j -gt $x ]
             do
                 stack=$(head -1 todeletestack.txt)
-                if [$stack != $IS ]
+                if [ $stack != $IS ]
                 then
                     aws cloudformation delete-stack --stack-name "${stack}"
                 else
