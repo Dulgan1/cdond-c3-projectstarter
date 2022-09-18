@@ -35,7 +35,7 @@ commands:
                 else
                     sed '1d' todelete.txt
                 fi
-          done
+            done
             #if aws s3api head-bucket --bucket udapeople-${CIRCLE_WORKFLOW_ID:0:7}
             #then
             #   aws s3 rm s3://udapeople-*/ --recursive
@@ -55,8 +55,7 @@ commands:
             j=$(wc --line todeletestack.txt)
             IS="InitialStack"
             x=0
-            while [ $j -gt $x ]
-            
+            while [ $j -gt $x ] 
             do
                 stack=$(head -1 todeletestack.txt)
                 if [ "$stack" != "$IS" ]
