@@ -515,7 +515,7 @@ workflows:
           filters:
             branches:
               only: [master]
-      - clean-oldinfra:
+      - cleanup-oldinfra:
           context: CircleBot
           requires: [cloudfront-update]
           filters:
