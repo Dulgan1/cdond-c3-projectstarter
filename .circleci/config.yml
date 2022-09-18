@@ -21,9 +21,9 @@ commands:
           command: |
             aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}/ --recursive
             aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}/ --force
-            aws s3api list-buckets --output text --query "Buckets[*].[Name] > todelete.txt
+            aws s3api list-buckets --output text --query "Buckets[*].[Name]" > todelete.txt
             cat todelete.txt
-            i=$(wc --line todelete.txt)
+            i=$(wc --line < todelete.txt)
             z=0
             while [ $i -gt $z ]
             do
@@ -52,7 +52,7 @@ commands:
           command: |
             aws cloudformation list-stacks --output text --query "StackSummaries[*].[StackName]"  > todeletestack.txt
             cat todeletestack.txt
-            j=$(wc --line todeletestack.txt)
+            j=$(wc --line < todeletestack.txt)
             IS="InitialStack"
             x=0
             while [ $j -gt $x ] 
