@@ -431,7 +431,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - run: |
+      - run: 
           name: Delete old stack
           command: |
             export OldWorkFlowID=$(aws cloudformation list-exports --query "Exports=[?Name==\'WorkFlowID\'].Value" --no-paginate--output text)
