@@ -434,7 +434,7 @@ jobs:
       - run: 
           name: Delete old stack
           command: |
-            export OldWorkFlowID=$(aws cloudformation list-exports --query "Exports[?Name=='WorkFlowID'].Value" --no-paginate--output text)
+            export OldWorkFlowID=$(aws cloudformation list-exports --query "Exports[?Name=='WorkFlowID'].Value" --output text)
             echo OldWorkFlowID=${OldWorkFlowID}
             echo CIRCLE_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID:0:7}
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter UPDATE_COMPLETE CREATE_COMPLETE --output text))
