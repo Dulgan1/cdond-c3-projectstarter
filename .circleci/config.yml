@@ -178,7 +178,7 @@ jobs:
           command: |
             yum -y install tar gzip
       - run:
-          name: Ensure FrontEnd Infrastructure Exists
+          name: Ensure Backend Infrastructure Exists
           command: |
             echo "[web]" > .circleci/ansible/inventory.txt
             aws cloudformation deploy \
@@ -186,11 +186,11 @@ jobs:
             --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --parameter-overrides  ID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
-            aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text >> .circleci/ansible/inventory.txt
+            aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=name,Value=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text >> .circleci/ansible/inventory.txt
             sed '/None/d' .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
       - run:
-          name: Ensure Backend Infrastructure Exists
+          name: Ensure Frontend Infrastructure Exists
           command: |
             aws cloudformation deploy \
             --template-file .circleci/files/frontend.yml \
@@ -235,10 +235,25 @@ jobs:
           command: |
             sudo apt-get install npm
       - run:
-          name: Configure Server
+          name: Configure Backend Server
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
+      - run: 
+          name:
+          command: |
+            echo "[web]" > .circleci/ansible/inventory.txt
+            aws cloudformation deploy \
+            --template-file .circleci/files/backend.yml \
+            --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \                             --parameter-overrides  ID="${CIRCLE_WORKFLOW_ID:0:7}" \
+            --tags project=udapeople
+            aws ec2 describe-instances --filters "Name=instance-state-name,Values=running
+" "Name=name,Value=Prome**" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text >> .circleci/ansible/inventory.txt                                                          sed '/None/d' .circleci/ansible/inventory.txt                                            cat .circleci/ansible/inventory.txt
+      - run: 
+          name: Install Prometheus
+          command:
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-prome.yml
       - destroy-environment
   run-migrations:
     docker:
