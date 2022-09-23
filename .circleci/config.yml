@@ -186,7 +186,7 @@ jobs:
             --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --parameter-overrides  ID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
-            aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-name,Values=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text >> .circleci/ansible/inventory.txt
+            aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text >> .circleci/ansible/inventory.txt
             sed '/None/d' .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
       - run:
@@ -242,7 +242,7 @@ jobs:
       - run:
           name: Install Node-exporter
           command: |
-            aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-name,Values=prome*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text >> .circleci/ansible/inventory.txt
+            aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=prome*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text >> .circleci/ansible/inventory.txt
             ansible-playbook -i inventory.txt configure-prome.yml
       - destroy-environment
   run-migrations:
@@ -300,7 +300,7 @@ jobs:
       - run:
           name: Get Backend Url
           command: |
-            export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-name,Values=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
+            export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
             export API_URL="http://${BACKEND_URL}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_URL}" >> frontend/.env
@@ -362,7 +362,7 @@ jobs:
             npm run build
             cd ..
             tar -C backend -czvf artifact.tar.gz .
-            export SCP_HOST=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-name,Values=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
+            export SCP_HOST=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
             ssh-keyscan -H $SCP_HOST >> ~/.ssh/known_hosts
             scp artifact.tar.gz ubuntu@$SCP_HOST:/home/ubuntu
             cd .circleci/ansible
@@ -400,7 +400,7 @@ jobs:
       - run:
           name: Backend Smoke-Test
           command: |
-            export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-name,Values=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
+            export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
