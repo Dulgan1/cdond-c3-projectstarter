@@ -206,8 +206,7 @@ jobs:
       - image: cimg/base:2021.04
         auth:
           username: dulgan
-          password: $DOCKERHUB_PAS
-          SWORD
+          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
       - add_ssh_keys: 
