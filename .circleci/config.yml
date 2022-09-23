@@ -242,7 +242,7 @@ jobs:
       - run:
           name: Install Node-exporter
           command: |
-            aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=name,Value=prome*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text >> .circleci/ansible/inventory.txt
+            aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=name,Values=prome*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text >> .circleci/ansible/inventory.txt
             ansible-playbook -i inventory.txt configure-prome.yml
       - destroy-environment
   run-migrations:
@@ -362,7 +362,7 @@ jobs:
             npm run build
             cd ..
             tar -C backend -czvf artifact.tar.gz .
-            export SCP_HOST=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=name,Value=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
+            export SCP_HOST=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=name,Values=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
             ssh-keyscan -H $SCP_HOST >> ~/.ssh/known_hosts
             scp artifact.tar.gz ubuntu@$SCP_HOST:/home/ubuntu
             cd .circleci/ansible
@@ -400,7 +400,7 @@ jobs:
       - run:
           name: Backend Smoke-Test
           command: |
-            export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=name,Value=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
+            export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=name,Values=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
