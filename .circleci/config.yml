@@ -235,14 +235,10 @@ jobs:
           command: |
             sudo apt-get install npm
       - run:
-          name: Configure Backend Server
+          name: Configure Backend Server/Install Node-Exporter
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
-      - run:
-          name: Install Node-exporter
-          command: |
-            cd .circleci/ansible
             aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=prome*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text >> .circleci/ansible/inventory.txt
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-prome.yml
