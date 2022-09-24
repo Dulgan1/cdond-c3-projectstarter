@@ -55,4 +55,4 @@ Resources:
       ImageId: ami-052efd3df9dad4825
       Tags:
         - Key: Name
-          Value: PromeEc2-${ID}
+          Value: promeEc2-${ID}
