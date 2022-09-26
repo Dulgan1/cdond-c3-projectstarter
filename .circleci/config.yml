@@ -301,7 +301,7 @@ jobs:
             export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
             export API_URL="http://${BACKEND_URL}:3030"
             echo "API_URL = ${API_URL}"
-            echo API_URL="http://${BACKEND_URL}" >> frontend/.env
+            echo API_URL="http://${BACKEND_URL}:3030" >> frontend/.env
             cat frontend/.env
       - run:
           command: |
