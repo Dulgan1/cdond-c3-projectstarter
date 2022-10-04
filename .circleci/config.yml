@@ -359,15 +359,17 @@ jobs:
             npm install
             npm run build
             cd ..
-            echo 'TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"'>> backend/.env
-            echo 'TYPEORM_ENTITIES: "{{ lookup('env' , 'TYPEORM_ENTITIES')}}"' >> backend/.env
-            echo 'TYPEORM_HOST: "{{ lookup('env' , 'TYPEORM_HOST')}}"' >> backend/.env
-            echo 'TYPEORM_PORT: 5432' >> backend/.env
-            echo 'TYPEORM_USERNAME: "{{ lookup('env' , 'TYPEORM_USERNAME')}}"' >> backend/.env
-            echo 'TYPEORM_PASSWORD: "{{ lookup('env' , 'TYPEORM_PASSWORD')}}"' >> backend/.env
-            echo 'TYPEORM_DATABASE: "{{ lookup('env' , 'TYPEORM_DATABASE')}}"' >> backend/.env
-            echo 'TYPEORM_MIGRATIONS: "{{ lookup('env' , 'TYPEORM_MIGRATIONS')}}"' >> backend/.env
-            echo 'TYPEORM_MIGRATIONS_DIR: "{{ lookup('env' , 'TYPEORM_MIGRATIONS_DIR')}}"' >> backend/.env
+            echo ENVIRONMENT=production >> .env
+            echo TYPEORM_CONNECTION=postgres >> .env
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> .env
+            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> .env
+            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> .env
+            echo NODE_ENV=production >> .env
+            echo TYPEORM_HOST=$TYPEORM_HOST >> .env
+            echo TYPEORM_PORT=$TYPEORM_PORT >> .env
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> .env
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> .env
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> .env
             cat backend/.env
             tar -C backend -czvf artifact.tar.gz .
             export SCP_HOST=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=backend*" --query 'Reservations[*].Instances[*].[PublicDnsName]' --output text)
