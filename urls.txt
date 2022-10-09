@@ -2,4 +2,4 @@ uRL01: https://github.com/Dulgan1/cdond-c3-projectstarter
 URL02: http://http://udapeople-a483892.s3-website-us-east-1.amazonaws.com
 URL03: https://d15bqf5by8e168.cloudfront.net
 URL04: http://ec2-44-204-10-176.compute-1.amazonaws.com:3030/api/status
-URL05: http://ec2-52-91-62-27.compute-1.amazonaws.com:9090
+URL05: http://ec2-52-91-62-27.compute-1.amazonaws.com:9090/
