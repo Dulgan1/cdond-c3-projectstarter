@@ -487,55 +487,55 @@ workflows:
       - scan-backend:
           context: CircleBot
           requires: [build-backend]
-      - deploy-infrastructure:
-          context: CircleBot
-          requires: 
-            - test-backend
-            - test-frontend
-            - scan-backend
-            - scan-frontend
-          filters:
-            branches:
-              only: [master]
-      - configure-infrastructure:
-          context: CircleBot
-          requires: [deploy-infrastructure]
-          filters:
-            branches:
-              only: [master]
-      - run-migrations:
-          context: CircleBot
-          requires: [configure-infrastructure]
-          filters:
-            branches:
-              only: [master]
-      - deploy-frontend:
-          context: CircleBot
-          requires: [run-migrations]
-          filters:
-            branches:
-              only: [master]
-      - deploy-backend:
-          context: CircleBot
-          requires: [deploy-frontend]
-          filters:
-            branches:
-              only: [master]
-      - smoke-test:
-          context: CircleBot
-          requires: [deploy-backend]
-          filters:
-            branches:
-              only: [master]
-      - cloudfront-update:
-          context: CircleBot
-          requires: [smoke-test]
-          filters:
-            branches:
-              only: [master]
-      - cleanup-oldinfra:
-          context: CircleBot
-          requires: [cloudfront-update]
-          filters:
-            branches:
-              only: [master]
+            #- deploy-infrastructure:
+            #context: CircleBot
+            #requires: 
+            #- test-backend
+            #- test-frontend
+            #- scan-backend
+            #- scan-frontend
+            #filters:
+            #branches:
+            #  only: [master]
+            #- configure-infrastructure:
+            #context: CircleBot
+            #requires: [deploy-infrastructure]
+            #filters:
+            #branches:
+            #  only: [master]
+            #- run-migrations:
+            #context: CircleBot
+            #requires: [configure-infrastructure]
+            #filters:
+            #branches:
+            #  only: [master]
+            #- deploy-frontend:
+            #context: CircleBot
+            #requires: [run-migrations]
+            #filters:
+            #branches:
+            #  only: [master]
+            #- deploy-backend:
+            #context: CircleBot
+            #requires: [deploy-frontend]
+            #filters:
+            # branches:
+            #  only: [master]
+            #- smoke-test:
+            #context: CircleBot
+            #requires: [deploy-backend]
+            #filters:
+            #branches:
+            #  only: [master]
+            #- cloudfront-update:
+            #context: CircleBot
+            #requires: [smoke-test]
+            #filters:
+            #branches:
+            #  only: [master]
+            #- cleanup-oldinfra:
+            #context: CircleBot
+            #requires: [cloudfront-update]
+            #filters:
+            #branches:
+            #  only: [master]
